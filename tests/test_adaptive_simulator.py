@@ -1,4 +1,4 @@
-"""test_adaptive_simulator.py - Stage 3 invariant tests (A-T) for simulation/adaptive_simulator.py."""
+"""test_adaptive_simulator.py - invariant tests (A-T) for the tick-by-tick simulation engine in simulation/adaptive_simulator.py."""
 
 import sys
 from pathlib import Path
@@ -552,7 +552,7 @@ def main():
 
         sys.exit(1)
 
-    print("\nAll Stage 3 invariants passed.")
+    print("\nAll invariants passed.")
 
 
 if __name__ == "__main__":

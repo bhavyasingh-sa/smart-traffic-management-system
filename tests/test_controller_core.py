@@ -1,4 +1,4 @@
-"""test_controller_core.py - Stage 2 invariant tests for the movement-aware controller_core.py."""
+"""test_controller_core.py - invariant tests for the movement-aware controller_core.py."""
 
 import sys
 from pathlib import Path
@@ -52,7 +52,7 @@ def check(name, condition):
 # require a running simulation - total arrivals equalling movement
 # arrivals, departures never exceeding arrivals, queue lengths never
 # going negative, every generated vehicle having exactly one movement -
-# depend on the tick-by-tick simulator and are tested in Stage 3's
+# depend on the tick-by-tick simulator and are tested in
 # test_adaptive_simulator.py instead.
 def test_twelve_movements():
 
@@ -553,7 +553,7 @@ def main():
 
         sys.exit(1)
 
-    print("\nAll Stage 2 invariants passed.")
+    print("\nAll invariants passed.")
 
 
 if __name__ == "__main__":

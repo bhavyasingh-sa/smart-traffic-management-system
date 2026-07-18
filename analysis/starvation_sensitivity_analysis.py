@@ -1,4 +1,4 @@
-"""starvation_sensitivity_analysis.py - Stage 3.5: evaluates the hard starvation safeguard across 5 threshold configurations (None/60/90/120/180) under 3 scenarios, using the exact same deterministic traffic schedule within each scenario."""
+"""starvation_sensitivity_analysis.py - evaluates the hard starvation safeguard across 5 threshold configurations (None/60/90/120/180) under 3 scenarios, using the exact same deterministic traffic schedule within each scenario."""
 
 import sys
 from pathlib import Path
@@ -42,7 +42,7 @@ SCENARIOS = [
     {
         "name": "Scenario 3: Heavy-demand stress (6000 ticks)",
         "ticks": 6000,
-        # Identical to the Stage 3 stress test: EB/WB boosted 6x.
+        # Identical to the stress scenario in tests/test_starvation_stress.py: EB/WB boosted 6x.
         "arrival_rate_overrides_factory": lambda base: {
             "EB": base["EB"] * 6.0,
             "WB": base["WB"] * 6.0,

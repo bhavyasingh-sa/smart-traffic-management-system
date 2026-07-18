@@ -1,4 +1,4 @@
-"""test_starvation_stress.py - Stage 3, item 9: deterministic stress scenario testing whether a persistently low-volume movement can be starved indefinitely by competing phases with sustained heavy demand."""
+"""test_starvation_stress.py - deterministic stress scenario testing whether a persistently low-volume movement can be starved indefinitely by competing phases with sustained heavy demand."""
 
 import sys
 from pathlib import Path
@@ -210,15 +210,14 @@ def main():
             f"  NOTE: observed max starvation "
             f"({max_overall_starvation} ticks) exceeds a single "
             f"MAX_GREEN+YELLOW_DURATION cycle "
-            f"({MAX_GREEN_PLUS_YELLOW_REFERENCE} ticks). As of "
-            "Stage 3.5, this run uses the default "
-            "MAX_STARVATION_TIME=120s hard safeguard (selected via "
-            "a 5-way sensitivity analysis - see "
-            "analysis/starvation_sensitivity_analysis.py), which "
-            "bounds this to roughly the threshold value and "
+            f"({MAX_GREEN_PLUS_YELLOW_REFERENCE} ticks). This run "
+            "uses the default MAX_STARVATION_TIME=120s hard "
+            "safeguard (selected via a 5-way sensitivity analysis - "
+            "see analysis/starvation_sensitivity_analysis.py), "
+            "which bounds this to roughly the threshold value and "
             "guarantees eventual service, instead of the unbounded "
-            "5,859-tick starvation originally found in Stage 3 "
-            "with no override in place. This is expected, bounded "
+            "5,859-tick starvation this scenario produces with no "
+            "override in place. This is expected, bounded "
             "behavior, not a new problem."
         )
 

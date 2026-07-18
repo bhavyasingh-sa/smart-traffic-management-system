@@ -1,4 +1,4 @@
-"""aggregate_sensitivity_results.py - reads cached per-run results from analysis/_sensitivity_cache/ (produced by starvation_sensitivity_analysis.py --single ...) and prints the full Stage 3.5 sensitivity report."""
+"""aggregate_sensitivity_results.py - reads cached per-run results from analysis/_sensitivity_cache/ (produced by starvation_sensitivity_analysis.py --single ...) and prints the full starvation-threshold sensitivity report."""
 
 import json
 import sys

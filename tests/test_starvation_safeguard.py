@@ -1,4 +1,4 @@
-"""test_starvation_safeguard.py - Stage 3.5 tests for the starvation-override safeguard (controller_core.py) and ML/IR hourly refresh (adaptive_simulator.py)."""
+"""test_starvation_safeguard.py - tests for the starvation-override safeguard (controller_core.py) and ML/IR hourly refresh (adaptive_simulator.py)."""
 
 import sys
 from pathlib import Path
@@ -513,7 +513,7 @@ def main(only_indices=None):
 
         sys.exit(1)
 
-    print("\nAll requested Stage 3.5 tests passed.")
+    print("\nAll requested tests passed.")
 
 
 if __name__ == "__main__":
