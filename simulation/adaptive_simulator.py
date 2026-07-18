@@ -48,7 +48,7 @@ RANDOM_SEED = 42
 DEFAULT_STARTING_PHASE = "NS_THROUGH"
 
 # One simulated tick = one second, so 3600 ticks = one simulated
-# hour. Used to decide when to refresh ML/IR evidence (Stage 3.5).
+# hour. Used to decide when to refresh ML/IR evidence.
 SECONDS_PER_SIMULATED_HOUR = 3600
 
 # Order movement types are sampled in for each arriving vehicle.
@@ -151,9 +151,10 @@ class AdaptiveTrafficSimulation:
         default (None) always uses the real, historically-derived
         rates from load_arrival_rates().
 
-        max_starvation_time: Stage 3.5 fairness safeguard threshold
-        (ticks/seconds). None (the default) disables it, matching
-        Stage 2/3 behavior exactly. Passed straight through to
+        max_starvation_time: hard fairness safeguard threshold
+        (ticks/seconds). None (the default) disables it, leaving
+        only the weighted formula's starvation component active.
+        Passed straight through to
         controller_core.should_switch_phase() every tick.
 
         generate_rag_explanations: whether to call the Gemini API
@@ -181,9 +182,9 @@ class AdaptiveTrafficSimulation:
         self.turning_proportions = load_turning_proportions()
 
         # Cached as the ORIGINAL hour's predictions - reset() always
-        # restores these, even if a mid-run hourly refresh (Stage
-        # 3.5) had replaced self.ml_predictions/ir_predictions with
-        # a later hour's values before reset() was called.
+        # restores these, even if a mid-run hourly refresh had
+        # replaced self.ml_predictions/ir_predictions with a later
+        # hour's values before reset() was called.
         self._initial_ml_predictions = build_ml_predictions(
             model_bundle=self.model_bundle,
             hour=self.hour,
@@ -323,8 +324,8 @@ class AdaptiveTrafficSimulation:
 
     def _refresh_ml_ir_if_hour_changed(self, tick):
         """
-        Stage 3.5: refresh ML/IR/RAG evidence when the simulated
-        hour advances (every SECONDS_PER_SIMULATED_HOUR ticks). Does
+        Refreshes ML/IR/RAG evidence when the simulated hour
+        advances (every SECONDS_PER_SIMULATED_HOUR ticks). Does
         NOT retrain the model or rebuild the IR index - it just
         calls the same build_ml_predictions()/build_ir_predictions()/
         _build_rag_explanations() again with the new hour, exactly
@@ -333,8 +334,9 @@ class AdaptiveTrafficSimulation:
 
         For a normal 300-tick or even a 3000-tick run this never
         fires (both are under 3600 ticks) - documented explicitly,
-        not just assumed, and confirmed by the Stage 3.5 tests. The
-        Gemini calls this triggers are therefore a one-time cost at
+        not just assumed, and confirmed by
+        tests/test_starvation_safeguard.py. The Gemini calls this
+        triggers are therefore a one-time cost at
         __init__ / hour-change for any realistic run length, not a
         recurring one during Play.
         """
@@ -482,9 +484,9 @@ class AdaptiveTrafficSimulation:
     def _serve_green_phase(self, tick):
         """
         Only movements in the currently active phase, and only
-        while signal_state == "GREEN", may depart. Matches V1:
-        YELLOW serves zero vehicles (deliberately preserved, not
-        changed - see Stage 3 report).
+        while signal_state == "GREEN", may depart. YELLOW serves
+        zero vehicles - deliberate, matching a real clearance
+        interval where no new vehicles enter the intersection.
         """
 
         if self.signal_state != "GREEN":
@@ -571,8 +573,9 @@ class AdaptiveTrafficSimulation:
         calculate_movement_priority). This simulator stores rich
         Vehicle objects instead, so this builds the plain
         arrival-tick view controller_core expects, once per tick.
-        This keeps controller_core.py completely unchanged from
-        Stage 2 - the adaptation happens here, in the simulator.
+        This keeps controller_core.py's decision logic completely
+        unaware of the simulator's internal Vehicle representation -
+        the adaptation happens here, in the simulator.
         """
 
         return {
@@ -1253,10 +1256,9 @@ class AdaptiveTrafficSimulation:
                 movement_queue_lengths.values()
             ),
 
-            # Display-only summary stats added for the dashboard
-            # (Final UI Polish stage) - purely a read of the
-            # self.completed_waits data already tracked since
-            # Stage 3's _serve_green_phase(); no new tracking
+            # Display-only summary stats for the dashboard - purely
+            # a read of the self.completed_waits data already
+            # tracked by _serve_green_phase(); no new tracking
             # logic, no controller behavior change.
             "average_completed_wait": (
                 float(np.mean(all_completed_waits))

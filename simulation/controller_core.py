@@ -82,8 +82,9 @@ STARVATION_WEIGHT = 0.10
 #
 # The 45/20/15/10/10 weighted formula above is UNCHANGED - this is
 # an ADDITIONAL fairness constraint layered on top of it, not a
-# replacement. The Stage 3 stress test proved that under sustained
-# heavy competing demand, the 10%-weighted starvation component
+# replacement. The stress test in tests/test_starvation_stress.py
+# proved that under sustained heavy competing demand, the
+# 10%-weighted starvation component
 # alone does not guarantee bounded waiting (a phase was starved for
 # 5,859 of 6,000 ticks). This safeguard forces a switch to a
 # starving movement's phase once its wait exceeds a hard ceiling,
@@ -348,8 +349,8 @@ def load_arrival_rates(hour=SIMULATION_HOUR, weekend=WEEKEND):
       it is ALREADY keyed by travel direction (EntryHeading), the
       same convention this project verified and uses throughout.
       So Approach "N" maps directly to NB, "S" to SB, "E" to EB,
-      "W" to WB - no swap needed, unlike the turning-proportions
-      mislabeling found during Stage 1/2.
+      "W" to WB - no swap needed, unlike an earlier turning-
+      proportions labeling bug this project found and fixed.
 
       ExpectedArrivalRate itself comes from real historical
       congestion severity (via severity_to_arrival_rate()), NOT a
@@ -777,9 +778,9 @@ def calculate_movement_priority(
       + 10% movement-specific starvation
 
     ir_predictions=None runs an ML-only mode (IR's 10% weight
-    redistributed proportionally across the other four), mirroring
-    V1's design, kept here for a future ablation comparison (Stage 4)
-    without duplicating this formula a second time.
+    redistributed proportionally across the other four), kept here
+    for a future ablation comparison (with vs. without IR) without
+    duplicating this formula a second time.
     """
 
     direction, _movement_type = parse_movement_id(movement_id)
@@ -844,13 +845,12 @@ def calculate_movement_priority_breakdown(
     """
     Same formula as calculate_movement_priority(), but returns the
     5 weighted contributions separately instead of only the total.
-    New in Stage 3.5, purely additive - does not change
+    Purely additive - does not change
     calculate_movement_priority()'s behavior or signature.
 
-    Exists so the future dashboard/RAG layer can show exactly how
-    much each of queue/wait/ML/IR/starvation contributed to a
-    movement's priority, per the Stage 3.5 dashboard-facing
-    requirements.
+    Exists so the dashboard/RAG layer can show exactly how much each
+    of queue/wait/ML/IR/starvation contributed to a movement's
+    priority.
     """
 
     direction, _movement_type = parse_movement_id(movement_id)
@@ -1022,8 +1022,8 @@ def check_starvation_override(
     max_starvation_time,
 ):
     """
-    Stage 3.5 fairness safeguard. Independent of, and layered on
-    top of, the 45/20/15/10/10 weighted formula (unchanged).
+    Hard fairness safeguard. Independent of, and layered on top of,
+    the 45/20/15/10/10 weighted formula (unchanged).
 
     If any movement NOT in current_phase has both:
       (a) a non-empty queue, and
@@ -1113,11 +1113,11 @@ def should_switch_phase(
 
     Starvation handling (two layers, both real, neither replacing
     the other):
-      1. The weighted formula's STARVATION_WEIGHT=10% component
-         (unchanged since Stage 2) - a soft, continuous influence.
-      2. This function's max_starvation_time hard safeguard (new in
-         Stage 3.5, default None=disabled) - checked immediately
-         after the MIN_GREEN gate, so it takes precedence over the
+      1. The weighted formula's STARVATION_WEIGHT=10% component -
+         a soft, continuous influence.
+      2. This function's max_starvation_time hard safeguard
+         (default None=disabled) - checked immediately after the
+         MIN_GREEN gate, so it takes precedence over the
          normal current_phase_empty/max_green/competing-priority
          checks below whenever it fires. It can ONLY fire when
          signal_state == "GREEN" (the only state this function is
