@@ -145,8 +145,13 @@ dataset at `data/raw/train.csv` and run `simulation/build_profiles.py`,
   explainable. See the note on `should_switch_phase()` in
   `simulation/controller_core.py`.
 - Green time is **not fixed** — it flexes between a 20-tick floor and a
-  60-tick ceiling based on real-time conditions, which is what makes this
-  genuinely adaptive rather than a pretimed signal.
+  60-tick ceiling based on real-time conditions. Red isn't fixed either:
+  it isn't tracked as its own timed state at all, it's just "some other
+  phase currently has the green" — so a movement's red duration is
+  whatever the other 3 competing phases take, which is itself variable.
+  The only genuinely fixed number is the 3-tick yellow clearance
+  interval, a safety gap, not a traffic-responsiveness lever. This is
+  what makes the signal genuinely adaptive rather than pretimed.
 - `EntryHeading`/`ExitHeading` in the raw dataset describe the
   **direction of travel**, not the physical side a vehicle arrives from —
   a northbound (NB) vehicle physically queues on the intersection's
