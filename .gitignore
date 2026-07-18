@@ -23,5 +23,5 @@ data/raw/
 # Jupyter
 .ipynb_checkpoints/
 
-# Claude Code local tooling config - not part of the submission
+# Local editor/tooling config - not part of the submission
 .claude/
