@@ -6,6 +6,8 @@ ML model, a retrieval system over historical traffic records, and a
 transparent decision formula, with an AI layer that explains each
 decision in plain English.
 
+**Live demo:** [smart-traffic-management-system-cj3juajxxjz6fnbmttefyd.streamlit.app](https://smart-traffic-management-system-cj3juajxxjz6fnbmttefyd.streamlit.app/)
+
 ## Overview
 
 The intersection modeled is a real one, Atlanta Intersection 84, using
@@ -157,7 +159,7 @@ and Streamlit.
 
 ## Deployment
 
-Built to run on [Streamlit Community Cloud](https://share.streamlit.io),
+Running live on [Streamlit Community Cloud](https://smart-traffic-management-system-cj3juajxxjz6fnbmttefyd.streamlit.app/),
 deployed straight from this repository with `app.py` as the entry point.
 The Gemini API key is supplied through Streamlit Cloud's Secrets manager
 rather than committed to the repo, the same way `python-dotenv` supplies
