@@ -26,13 +26,13 @@ GEMINI_MODEL = "gemini-3.5-flash"
 
 # Operator-facing explanations are a short status note, not a report -
 # the prompt itself asks for 2-3 sentences (~60 words); this cap is a
-# backstop, not the primary length control. Set generously (not
-# ~100-150, which a 2-3 sentence answer would need) because some
-# Gemini models spend part of max_output_tokens on internal
-# "thinking" before the visible answer - too tight a cap risks an
-# EMPTY response (thinking exhausts the budget before any answer
-# text is written), which is worse than a longer-than-asked answer.
-MAX_OUTPUT_TOKENS = 400
+# backstop, not the primary length control. gemini-3.5-flash is a
+# Gemini 3.x model, where thinking CANNOT be fully disabled (unlike
+# 2.5 Flash's thinking_budget=0) - thinking_level=MINIMAL below is
+# the lowest available setting, but it still consumes part of this
+# budget before the visible answer. 400 was too tight: real responses
+# were getting cut off mid-sentence once thinking exhausted it.
+MAX_OUTPUT_TOKENS = 1024
 
 
 def create_gemini_client():
@@ -218,6 +218,9 @@ def generate_traffic_explanation(
         contents=prompt,
         config=types.GenerateContentConfig(
             max_output_tokens=MAX_OUTPUT_TOKENS,
+            thinking_config=types.ThinkingConfig(
+                thinking_level=types.ThinkingLevel.MINIMAL,
+            ),
         ),
     )
 
