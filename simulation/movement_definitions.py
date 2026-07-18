@@ -44,7 +44,8 @@ DIRECTION_MOVEMENTS = {
 }
 
 # EntryHeading/ExitHeading describe direction of TRAVEL, not the
-# side a vehicle arrives from - verified in the Phase 1 audit.
+# side a vehicle arrives from - verified against the real dataset
+# (see analysis/movement_audit.py).
 # A "northbound" (NB) vehicle is travelling north, so it physically
 # queues on the SOUTH leg of the intersection, waiting to go north.
 
@@ -132,7 +133,7 @@ PHASE_COMPATIBILITY_NOTES = {
 
 # Every NS_* phase conflicts with every EW_* phase (perpendicular
 # traffic crossing the intersection box - the same fundamental
-# conflict V1's NS/EW split already modeled).
+# conflict a simple NS/EW signal split models).
 #
 # Within the same axis, the THROUGH phase and the LEFT phase conflict
 # with each other (a left turn crosses the opposing through path),

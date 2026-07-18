@@ -48,12 +48,11 @@ TRAFFIC_PROFILES_PATH = (
     / "traffic_profiles.csv"
 )
 
-# V1's ARRIVAL_RATES (0.4092/0.2654/0.3878/0.5452 vehicles/sec for
-# N/S/E/W) were traced (not guessed) to exactly:
+# ARRIVAL_RATES (0.4092/0.2654/0.3878/0.5452 vehicles/sec for
+# N/S/E/W) are derived directly from real data, not guessed:
 #     traffic_profiles.csv's ExpectedArrivalRate(Hour=8, Weekend=0)
 #     / ARRIVAL_RATE_SCALING_DIVISOR
-# confirmed to 4 decimal places against V1's live source. This
-# divisor reproduces that exact, already-existing methodology.
+# confirmed to 4 decimal places by tracing the calculation through.
 ARRIVAL_RATE_SCALING_DIVISOR = 10.0
 
 CITY = "Atlanta"
@@ -65,14 +64,12 @@ MONTH = 6
 
 SIMULATION_DURATION = 300
 
-# Unchanged from V1 — not modified without approval.
 MIN_GREEN = 20
 MAX_GREEN = 60
 YELLOW_DURATION = 3
 
 SERVICE_RATE = 1.0
 
-# Unchanged from V1 — preserved exactly, per requirement.
 QUEUE_WEIGHT = 0.45
 WAIT_WEIGHT = 0.20
 ML_WEIGHT = 0.15
@@ -162,9 +159,9 @@ PHASE_TIE_BREAK_ORDER = [
 # to matter in a real run.
 TIE_BREAK_EPSILON = 1e-9
 
-# Verified mapping (see analysis/movement_audit.py and the Phase 1
-# audit): a travel direction's EntryHeading is simply its own
-# compass letter. This is the ONLY place this mapping is defined —
+# Verified mapping (see analysis/movement_audit.py): a travel
+# direction's EntryHeading is simply its own compass letter. This
+# is the ONLY place this mapping is defined —
 # every other function in this file goes through it.
 ENTRY_HEADING_LETTER = {
     "NB": "N",
@@ -237,8 +234,8 @@ def derive_exit_heading(entry_heading_letter, movement_type):
 
     STRAIGHT: delta 0     LEFT: delta 270     RIGHT: delta 90
 
-    This was verified against all 12 real rows in the Phase 1 audit
-    (e.g. NB_LEFT: N=0 -> (0+270)%360=270=W, matching the real
+    This was verified against all 12 real rows (see
+    analysis/movement_audit.py) (e.g. NB_LEFT: N=0 -> (0+270)%360=270=W, matching the real
     Cheshire Bridge Rd N -> Lindbergh Dr NE W record).
     """
 
@@ -341,7 +338,7 @@ def load_arrival_rates(hour=SIMULATION_HOUR, weekend=WEEKEND):
     Load real, historically-derived arrival rates for the 4 travel
     directions (NB/SB/EB/WB), by reading traffic_profiles.csv
     (built by simulation/build_profiles.py directly from the raw
-    dataset) and applying V1's exact, traced scaling.
+    dataset) and applying a verified, traced scaling factor.
 
     Provenance (traced, not assumed):
       traffic_profiles.csv's "Approach" column is built by
@@ -355,7 +352,7 @@ def load_arrival_rates(hour=SIMULATION_HOUR, weekend=WEEKEND):
       ExpectedArrivalRate itself comes from real historical
       congestion severity (via severity_to_arrival_rate()), NOT a
       fabricated number. Dividing by ARRIVAL_RATE_SCALING_DIVISOR
-      reproduces V1's exact hardcoded constants (verified to 4
+      reproduces the verified constants (checked to 4
       decimal places): N/NB=0.4092, S/SB=0.2654, E/EB=0.3878,
       W/WB=0.5452 vehicles/second at Hour=8, Weekend=0.
     """
@@ -435,8 +432,8 @@ def build_ml_input(direction, hour, weekend, month):
     """
     Build the synthetic inference row for one travel direction.
 
-    Corrected convention (verified in the Phase 1/2 audit): a
-    straight-through movement keeps the SAME heading at entry and
+    Corrected convention (verified against analysis/movement_audit.py):
+    a straight-through movement keeps the SAME heading at entry and
     exit, so this uses ENTRY_HEADING_LETTER[direction] for BOTH
     EntryHeading and ExitHeading:
 
@@ -445,10 +442,10 @@ def build_ml_input(direction, hour, weekend, month):
         EB -> EntryHeading E, ExitHeading E
         WB -> EntryHeading W, ExitHeading W
 
-    V1 used the opposite letter for ExitHeading (e.g. N -> S), which
-    the audit showed represents a U-turn under the dataset's real
-    convention and was never seen in training. V2 does not repeat
-    that mismatch.
+    An earlier version of this project used the opposite letter for
+    ExitHeading (e.g. N -> S), which the audit showed represents a
+    U-turn under the dataset's real convention and was never seen
+    in training. That mismatch is fixed here.
 
     Street names use STRAIGHT_THROUGH_STREET_NAMES (the real names
     for this intersection's straight movements, read from
@@ -587,9 +584,9 @@ def build_ir_query(movement_id, hour, weekend, month):
 
 def extract_historical_severity(result):
     """
-    Identical logic to V1's extract_historical_severity — unchanged,
-    since the audit found no issue with this function (it never
-    touches EntryHeading/ExitHeading at all).
+    This function never touches EntryHeading/ExitHeading, so it's
+    unaffected by the heading-convention issue fixed elsewhere in
+    this file.
     """
 
     metadata = result.get("metadata", {})
@@ -950,10 +947,6 @@ def calculate_phase_priority(
         even when the rest of its phase is empty, and would ignore
         the phase's overall demand - more volatile, harder to
         reason about in a viva.
-      - MEAN is also what V1 used (np.mean across a phase's
-        approaches), so this preserves V1's conceptual behavior
-        exactly, just applied to however many movements a phase
-        now serves.
     """
 
     priorities = [

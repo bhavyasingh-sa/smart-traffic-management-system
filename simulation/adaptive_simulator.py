@@ -174,8 +174,8 @@ class AdaptiveTrafficSimulation:
             generate_rag_explanations
         )
 
-        # Loaded once - these don't change tick to tick, matching
-        # V1's pattern of loading ML/IR/rates once in __init__.
+        # Loaded once - these don't change tick to tick, so there's
+        # no reason to reload them on every step.
         self.model_bundle = load_ml_model()
         self.ir_retriever = load_ir_retriever()
 
@@ -649,9 +649,9 @@ class AdaptiveTrafficSimulation:
 
             # should_switch_phase() already computed every phase's
             # priority as `details` - reuse it directly instead of
-            # recomputing (matches V1's pattern of overwriting the
-            # separately-computed priorities with should_switch's
-            # own `details` on GREEN ticks).
+            # recomputing. This intentionally overwrites any
+            # separately-computed phase_priorities on every GREEN
+            # tick rather than calculating them twice.
             self.phase_priorities = dict(details)
 
             if should_switch:
@@ -937,8 +937,9 @@ class AdaptiveTrafficSimulation:
     def _movement_live_congestion(self):
         """
         Dashboard-only visualization signal. Does not affect
-        controller decisions - same 70/30 queue/wait blend V1 used,
-        applied per movement instead of per approach.
+        controller decisions - same 70/30 queue/wait blend as
+        _queue_live_congestion() below, applied per movement
+        instead of per approach.
         """
 
         congestion = {}
@@ -1283,7 +1284,7 @@ def print_section(title):
 def main():
 
     print_section(
-        "SMART TRAFFIC AI V2 — MOVEMENT-AWARE ADAPTIVE SIMULATION"
+        "SMART TRAFFIC AI — MOVEMENT-AWARE ADAPTIVE SIMULATION"
     )
 
     simulator = AdaptiveTrafficSimulation()

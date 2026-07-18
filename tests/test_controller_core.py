@@ -99,8 +99,8 @@ def test_every_movement_in_exactly_one_phase():
 def test_heading_mapping_matches_real_audit():
     """
     Cross-checked against the real movement matrix produced by
-    analysis/movement_audit.py (Phase 1 audit) - these are the
-    actual observed EntryHeading -> ExitHeading pairs.
+    analysis/movement_audit.py - these are the actual observed
+    EntryHeading -> ExitHeading pairs.
     """
 
     expected = {
@@ -159,7 +159,7 @@ def test_ml_input_uses_same_heading_convention():
 
         check(
             f"{direction}: ML input uses same heading "
-            f"({entry} -> {exit_}), not V1's opposite-heading bug",
+            f"({entry} -> {exit_}), not the opposite-heading bug",
             entry == exit_,
         )
 
