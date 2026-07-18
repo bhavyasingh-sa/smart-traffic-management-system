@@ -1,0 +1,15 @@
+numpy>=1.24
+pandas>=2.0
+streamlit>=1.58
+
+# Pinned to match the version the trained model/IR index were
+# pickled with, to avoid scikit-learn's InconsistentVersionWarning
+# when unpickling models/ml/congestion_classifier.pkl and
+# models/ir/traffic_ir.pkl.
+scikit-learn==1.9.0
+
+# Used by rag/generator.py (Gemini-based explanation layer) - not
+# yet wired into the simulator/tests, but present in the project
+# and required if that module is imported/run.
+python-dotenv>=1.0
+google-genai>=1.0

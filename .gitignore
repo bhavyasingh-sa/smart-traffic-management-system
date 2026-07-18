@@ -1,0 +1,27 @@
+# Secrets - never commit. Contains the real Gemini API key.
+.env
+
+# Python virtual environment - reinstall via requirements.txt instead
+# of committing 500+MB of installed packages.
+venv/
+
+# Python bytecode / cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Raw source dataset (426MB) - never read at runtime by the live app,
+# only by the offline build scripts (ml/train.py, ir/build_index.py,
+# simulation/build_profiles.py). Their already-built outputs
+# (models/, data/processed/) are committed instead.
+data/raw/
+
+# macOS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Claude Code local tooling config - not part of the submission
+.claude/

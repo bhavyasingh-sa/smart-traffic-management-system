@@ -1,0 +1,13 @@
+EntryStreetName,EntryHeading,ExitStreetName,ExitHeading,records,movement_type,travel_direction,movement_id,traffic_share_pct,ml_suitable_standalone
+Cheshire Bridge Road,N,Cheshire Bridge Road,N,329,STRAIGHT,NB,NB_STRAIGHT,13.5,True
+Cheshire Bridge Road,S,Cheshire Bridge Road,S,327,STRAIGHT,SB,SB_STRAIGHT,13.42,True
+Cheshire Bridge Road,N,Lindbergh Drive Northeast,W,226,LEFT,NB,NB_LEFT,9.27,True
+Lavista Road Northeast,W,Lindbergh Drive Northeast,W,220,STRAIGHT,WB,WB_STRAIGHT,9.03,True
+Lavista Road Northeast,W,Cheshire Bridge Road,N,199,RIGHT,WB,WB_RIGHT,8.17,False
+Cheshire Bridge Road,S,Lindbergh Drive Northeast,W,190,RIGHT,SB,SB_RIGHT,7.8,False
+Cheshire Bridge Road,S,Lavista Road Northeast,E,189,LEFT,SB,SB_LEFT,7.76,False
+Lindbergh Drive Northeast,E,Lavista Road Northeast,E,168,STRAIGHT,EB,EB_STRAIGHT,6.89,False
+Lavista Road Northeast,W,Cheshire Bridge Road,S,159,LEFT,WB,WB_LEFT,6.52,False
+Cheshire Bridge Road,N,Lavista Road Northeast,E,157,RIGHT,NB,NB_RIGHT,6.44,False
+Lindbergh Drive Northeast,E,Cheshire Bridge Road,N,143,LEFT,EB,EB_LEFT,5.87,False
+Lindbergh Drive Northeast,E,Cheshire Bridge Road,S,130,RIGHT,EB,EB_RIGHT,5.33,False
