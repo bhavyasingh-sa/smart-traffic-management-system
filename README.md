@@ -157,6 +157,8 @@ and Streamlit.
 
 ## Deployment
 
-Deployable on [Streamlit Community Cloud](https://share.streamlit.io)
-for free: point it at this repo with `app.py` as the entry file, add
-`GEMINI_API_KEY` under the app's Secrets settings, and deploy.
+Built to run on [Streamlit Community Cloud](https://share.streamlit.io),
+deployed straight from this repository with `app.py` as the entry point.
+The Gemini API key is supplied through Streamlit Cloud's Secrets manager
+rather than committed to the repo, the same way `python-dotenv` supplies
+it locally from `.env`.
