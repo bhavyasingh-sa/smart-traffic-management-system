@@ -44,10 +44,18 @@ CONGESTION_COLOURS = {
     "SEVERE": CONGESTION_SEVERE,
 }
 
-VIEWBOX_SIZE = 900
-CENTER = VIEWBOX_SIZE / 2  # 450
+VIEWBOX_SIZE = 1000
+CENTER = VIEWBOX_SIZE / 2  # 500
+
+# Roads stop short of the canvas edge on all 4 arms instead of
+# running full-bleed, so there's a visible margin of background
+# around the whole intersection rather than markings running flush
+# to the frame.
+ROAD_MARGIN = 50
+ROAD_FAR_EDGE = VIEWBOX_SIZE - ROAD_MARGIN
+
 INTERSECTION_HALF_WIDTH = 130
-STOP_LINE = CENTER + INTERSECTION_HALF_WIDTH  # 580 = intersection edge
+STOP_LINE = CENTER + INTERSECTION_HALF_WIDTH  # intersection edge
 LANE_WIDTH = 22
 LANES_PER_CARRIAGEWAY = 3
 ROAD_WIDTH = LANE_WIDTH * LANES_PER_CARRIAGEWAY * 2
@@ -168,12 +176,12 @@ def _lane_arrow(movement_type):
 
 
 def _render_road_surface():
-    """The two continuous asphalt corridors behind all approaches."""
+    """The two continuous asphalt corridors behind all approaches, inset by ROAD_MARGIN on every arm."""
 
     return f"""
-    <rect x="{ROAD_EDGE}" y="0" width="{ROAD_WIDTH}"
-        height="{VIEWBOX_SIZE}" fill="{ASPHALT}"></rect>
-    <rect x="0" y="{ROAD_EDGE}" width="{VIEWBOX_SIZE}"
+    <rect x="{ROAD_EDGE}" y="{ROAD_MARGIN}" width="{ROAD_WIDTH}"
+        height="{VIEWBOX_SIZE - 2 * ROAD_MARGIN}" fill="{ASPHALT}"></rect>
+    <rect x="{ROAD_MARGIN}" y="{ROAD_EDGE}" width="{VIEWBOX_SIZE - 2 * ROAD_MARGIN}"
         height="{ROAD_WIDTH}" fill="{ASPHALT}"></rect>
     """
 
@@ -263,7 +271,7 @@ def _render_approach_group(
         parts.append(
             f'<rect x="{lane_x}" y="{STOP_LINE}" '
             f'width="{lane_fill_width}" '
-            f'height="{VIEWBOX_SIZE / 2 - INTERSECTION_HALF_WIDTH}" '
+            f'height="{ROAD_FAR_EDGE - STOP_LINE}" '
             f'data-anim-color-from="{previous_colour}" '
             f'data-anim-color-to="{current_colour}" '
             f'fill="{previous_colour}" opacity="0.40"></rect>'
@@ -279,7 +287,7 @@ def _render_approach_group(
 
             parts.append(
                 f'<line x1="{divider_x}" y1="{STOP_LINE}" '
-                f'x2="{divider_x}" y2="{VIEWBOX_SIZE}" '
+                f'x2="{divider_x}" y2="{ROAD_FAR_EDGE}" '
                 f'stroke="{LANE_MARKING}" stroke-width="2" '
                 f'stroke-dasharray="14,10" opacity="0.55"></line>'
             )
@@ -288,7 +296,7 @@ def _render_approach_group(
     for centreline_x in (CENTER - 2, CENTER + 2):
         parts.append(
             f'<line x1="{centreline_x}" y1="{CENTER + 20}" '
-            f'x2="{centreline_x}" y2="{VIEWBOX_SIZE}" '
+            f'x2="{centreline_x}" y2="{ROAD_FAR_EDGE}" '
             f'stroke="#b89a3c" stroke-width="1.4" opacity="0.75"></line>'
         )
 
@@ -401,7 +409,7 @@ def _render_approach_group(
     )
 
     parts.append(
-        f'<text x="{CENTER}" y="{VIEWBOX_SIZE - 14}" '
+        f'<text x="{CENTER}" y="{ROAD_FAR_EDGE - 14}" '
         f'font-size="11" fill="#8a97a3" text-anchor="middle" '
         f'letter-spacing="1.5" font-family="monospace">'
         f"{direction}</text>"
