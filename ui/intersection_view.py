@@ -187,12 +187,13 @@ def _render_road_surface():
 
 
 def _render_junction_markings():
-    """South-facing zebra crossing and lane leads (rotated per side).
+    """South-facing zebra crossing (rotated per side).
 
     The zebra band sits between the intersection edge (STOP_LINE)
     and the stop bar (STOP_BAR_Y), so approaching traffic meets:
-    traffic light -> stop line -> zebra -> intersection. Lane leads
-    connect the intersection interior to its edge.
+    traffic light -> stop line -> zebra -> intersection. The
+    intersection interior itself stays a clean, unmarked box, like a
+    real junction - no lane-division dashes are drawn inside it.
     """
 
     crossing = "".join(
@@ -203,15 +204,7 @@ def _render_junction_markings():
         for index in range(ZEBRA_STRIPE_COUNT)
     )
 
-    lane_leads = "".join(
-        f'<line x1="{CENTER + LANE_WIDTH * boundary}" y1="{CENTER + 24}" '
-        f'x2="{CENTER + LANE_WIDTH * boundary}" y2="{STOP_LINE - 4}" '
-        f'stroke="{LANE_MARKING}" stroke-width="2" '
-        f'stroke-dasharray="10,8" opacity="0.42"></line>'
-        for boundary in range(1, LANES_PER_CARRIAGEWAY)
-    )
-
-    return lane_leads + crossing
+    return crossing
 
 
 def _render_approach_group(
