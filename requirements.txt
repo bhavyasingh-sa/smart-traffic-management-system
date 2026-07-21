@@ -8,8 +8,6 @@ streamlit>=1.58
 # models/ir/traffic_ir.pkl.
 scikit-learn==1.9.0
 
-# Used by rag/generator.py (Gemini-based explanation layer) - not
-# yet wired into the simulator/tests, but present in the project
-# and required if that module is imported/run.
+# Used by rag/generator.py, the Gemini-based explanation layer.
 python-dotenv>=1.0
 google-genai>=1.0
