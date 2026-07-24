@@ -101,14 +101,6 @@ def get_global_css():
         margin: 0;
     }}
 
-    .stc-subtitle {{
-        color: var(--muted);
-        font-size: 11px;
-        letter-spacing: 1.3px;
-        text-transform: uppercase;
-        margin-top: 6px;
-    }}
-
     .stc-badge-row {{
         display: flex;
         gap: 10px;

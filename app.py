@@ -63,18 +63,7 @@ render_html(f"""
     <div class="stc-title">
         SMART TRAFFIC MANAGEMENT AND DECISION SUPPORT SYSTEM
     </div>
-    <div class="stc-subtitle">
-        {state['city'].upper()} / INTERSECTION
-        {state['intersection_id']:03d} /
-        ML + IR ADAPTIVE SIGNAL CONTROLLER
-    </div>
     <div class="stc-badge-row">
-        <div class="stc-badge">
-            {"SIMULATION COMPLETE" if state['finished'] else "OPERATIONAL"}
-        </div>
-        <div class="stc-badge">
-            MOVEMENT-AWARE CONTROLLER (12 MOVEMENTS)
-        </div>
         <div class="stc-badge">
             TICK {state['tick']:04d} /
             {state['simulation_duration']}
