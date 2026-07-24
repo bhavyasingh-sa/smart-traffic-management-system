@@ -264,6 +264,14 @@ class AdaptiveTrafficSimulation:
             for movement_id in MOVEMENT_IDS
         }
 
+        # Running totals for average_completed_wait/max_completed_wait
+        # in get_state(), kept in step with completed_waits above so
+        # that O(1)-per-tick summary lookup doesn't require re-scanning
+        # every wait time ever recorded on every single tick.
+        self._completed_wait_sum = 0.0
+        self._completed_wait_count = 0
+        self._completed_wait_max = 0.0
+
         self.movement_max_queues = {
             movement_id: 0
             for movement_id in MOVEMENT_IDS
@@ -521,6 +529,12 @@ class AdaptiveTrafficSimulation:
                     self.completed_waits[
                         movement_id
                     ].append(wait)
+
+                    self._completed_wait_sum += wait
+                    self._completed_wait_count += 1
+                    self._completed_wait_max = max(
+                        self._completed_wait_max, wait
+                    )
 
                     self.movement_total_departures[
                         movement_id
@@ -1128,12 +1142,6 @@ class AdaptiveTrafficSimulation:
             for direction in TRAVEL_DIRECTIONS
         }
 
-        all_completed_waits = [
-            wait
-            for movement_id in MOVEMENT_IDS
-            for wait in self.completed_waits[movement_id]
-        ]
-
         return {
             "tick": self.tick,
             "simulation_duration": SIMULATION_DURATION,
@@ -1257,18 +1265,20 @@ class AdaptiveTrafficSimulation:
                 movement_queue_lengths.values()
             ),
 
-            # Display-only summary stats for the dashboard - purely
-            # a read of the self.completed_waits data already
-            # tracked by _serve_green_phase(); no new tracking
-            # logic, no controller behavior change.
+            # Display-only summary stats for the dashboard - read
+            # from the running totals _serve_green_phase() maintains
+            # alongside self.completed_waits, so this stays O(1) per
+            # tick regardless of how many ticks the simulation has
+            # run for.
             "average_completed_wait": (
-                float(np.mean(all_completed_waits))
-                if all_completed_waits
+                self._completed_wait_sum
+                / self._completed_wait_count
+                if self._completed_wait_count
                 else 0.0
             ),
             "max_completed_wait": (
-                float(np.max(all_completed_waits))
-                if all_completed_waits
+                self._completed_wait_max
+                if self._completed_wait_count
                 else 0.0
             ),
         }
