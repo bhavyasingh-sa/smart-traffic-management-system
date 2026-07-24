@@ -115,15 +115,21 @@ if toolbar["reset"]:
 state = simulator.get_state()
 
 
-# Primary view: the intersection itself, full width, matching what
-# an actual operator would look at. Model internals (ML scores,
-# priority breakdown) sit in one collapsed section below, not mixed
-# in here.
-components.html(
-    build_intersection_html(state, previous_state),
-    height=700,
-    scrolling=False,
-)
+# Primary view: the intersection itself, matching what an actual
+# operator would look at. Model internals (ML scores, priority
+# breakdown) sit in one collapsed section below, not mixed in here.
+# Centered in a constrained column rather than the full page width -
+# the SVG is square, so letting it stretch edge-to-edge would scale
+# it taller than the fixed embed height below and clip the bottom.
+_, intersection_column, _ = st.columns([1, 2.3, 1], gap="medium")
+
+with intersection_column:
+
+    components.html(
+        build_intersection_html(state, previous_state),
+        height=700,
+        scrolling=False,
+    )
 
 # This render's state becomes the next render's "previous" - saved
 # after building the view so the animation always spans exactly one
