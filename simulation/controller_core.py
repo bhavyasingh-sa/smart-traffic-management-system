@@ -62,7 +62,12 @@ SIMULATION_HOUR = 8
 WEEKEND = 0
 MONTH = 6
 
-SIMULATION_DURATION = 300
+# 1 tick = 1 simulated second, so 1200 ticks = 20 simulated minutes -
+# a 4x longer demo run than before, while staying well under the
+# 3600-tick (1 simulated hour) boundary that triggers a real Gemini
+# API refresh (see adaptive_simulator._refresh_ml_ir_if_hour_changed),
+# so a normal run's RAG quota cost stays predictable.
+SIMULATION_DURATION = 1200
 
 MIN_GREEN = 20
 MAX_GREEN = 60
