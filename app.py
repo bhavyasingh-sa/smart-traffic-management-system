@@ -121,13 +121,13 @@ state = simulator.get_state()
 # Centered in a constrained column rather than the full page width -
 # the SVG is square, so letting it stretch edge-to-edge would scale
 # it taller than the fixed embed height below and clip the bottom.
-_, intersection_column, _ = st.columns([1, 2.3, 1], gap="medium")
+_, intersection_column, _ = st.columns([0.8, 2.6, 0.8], gap="medium")
 
 with intersection_column:
 
     components.html(
         build_intersection_html(state, previous_state),
-        height=700,
+        height=800,
         scrolling=False,
     )
 
