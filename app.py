@@ -11,7 +11,6 @@ from ui.styles import get_global_css, render_html
 from ui.intersection_view import build_intersection_html
 from ui.toolbar import render_simulation_toolbar
 from ui.panels import (
-    render_current_control_panel,
     render_ml_panel,
     render_model_performance_panel,
     render_rag_explanation_panel,
@@ -116,30 +115,20 @@ if toolbar["reset"]:
 state = simulator.get_state()
 
 
-# Primary view: intersection + current status, matching what an
-# actual operator would look at. Model internals (ML scores, priority
-# breakdown) sit in one collapsed section below, not mixed in here.
-intersection_column, control_column = st.columns(
-    [2.3, 1.0],
-    gap="medium",
+# Primary view: the intersection itself, full width, matching what
+# an actual operator would look at. Model internals (ML scores,
+# priority breakdown) sit in one collapsed section below, not mixed
+# in here.
+components.html(
+    build_intersection_html(state, previous_state),
+    height=700,
+    scrolling=False,
 )
 
-with intersection_column:
-
-    components.html(
-        build_intersection_html(state, previous_state),
-        height=700,
-        scrolling=False,
-    )
-
-    # This render's state becomes the next render's "previous" - saved
-    # after building the view so the animation always spans exactly
-    # one visible update.
-    st.session_state.previous_render_state = state
-
-with control_column:
-
-    render_current_control_panel(state)
+# This render's state becomes the next render's "previous" - saved
+# after building the view so the animation always spans exactly one
+# visible update.
+st.session_state.previous_render_state = state
 
 
 # AI explanation gets its own full-width, centered section rather than

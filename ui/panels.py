@@ -1,4 +1,4 @@
-"""ui/panels.py - control panels: current control status, ML predictions, and the Gemini/RAG explanation."""
+"""ui/panels.py - panels for ML predictions, model performance metrics, and the Gemini/RAG explanation."""
 
 import streamlit as st
 
@@ -8,108 +8,6 @@ from simulation.movement_definitions import (
 )
 
 from ui.styles import render_html
-
-
-DECISION_TAG_CLASS = {
-    "SWITCH": "stc-tag-switch",
-    "HOLD": "stc-tag-hold",
-    "TRANSITION": "stc-tag-transition",
-    "ACTIVATE": "stc-tag-activate",
-}
-
-
-def _format_reason(reason):
-
-    if not reason:
-        return "\u2014"
-
-    if reason == "starvation_override":
-        return "STARVATION OVERRIDE"
-
-    return reason.replace("_", " ").upper()
-
-
-def render_current_control_panel(state):
-
-    decision = state["last_decision"]
-
-    tag_class = DECISION_TAG_CLASS.get(
-        decision["action"], "stc-tag-hold"
-    )
-
-    is_override = (
-        state["decision_type"] == "starvation_override"
-    )
-
-    render_html(f"""
-    <div class="stc-panel">
-        <div class="stc-panel-title">Current Control</div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Intersection / Time</span>
-            <span class="stc-row-value">
-                {state['city'].upper()}-{state['intersection_id']:03d}
-                / {state['simulated_hour']:02d}:00
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Current Phase</span>
-            <span class="stc-row-value">
-                {state['current_phase']}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Target Phase</span>
-            <span class="stc-row-value">
-                {state['target_phase'] or '\u2014'}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Signal State</span>
-            <span class="stc-row-value">
-                {state['signal_state']}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Decision</span>
-            <span class="stc-tag {tag_class}">
-                {decision['action']}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Decision Reason</span>
-            <span class="stc-row-value">
-                {_format_reason(decision['reason'])}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Decision Type</span>
-            <span class="stc-tag {'stc-tag-override' if is_override else 'stc-tag-hold'}">
-                {'STARVATION OVERRIDE' if is_override else 'WEIGHTED OPTIMIZATION'}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Adaptive Switch #</span>
-            <span class="stc-row-value">
-                {state['adaptive_switches']}
-            </span>
-        </div>
-
-        <div class="stc-row">
-            <span class="stc-row-label">Decision Time</span>
-            <span class="stc-row-value">
-                Tick {decision['tick']:04d}
-            </span>
-        </div>
-    </div>
-    """)
 
 
 def render_ml_panel(state):

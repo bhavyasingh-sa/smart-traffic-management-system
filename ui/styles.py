@@ -196,21 +196,6 @@ def get_global_css():
         padding: 10px 12px;
     }}
 
-    .stc-tag {{
-        display: inline-block;
-        padding: 2px 8px;
-        font-size: 10px;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        border: 1px solid var(--border);
-    }}
-
-    .stc-tag-switch {{ color: #e0866f; border-color: #6b3a2f; }}
-    .stc-tag-hold {{ color: #6fb98c; border-color: #2f5c40; }}
-    .stc-tag-transition {{ color: #c9a227; border-color: #5c4e1f; }}
-    .stc-tag-activate {{ color: #7ab0d8; border-color: #2f4a5c; }}
-    .stc-tag-override {{ color: #d84f4f; border-color: #6b2f2f; }}
-
     table.stc-table {{
         width: 100%;
         border-collapse: collapse;
