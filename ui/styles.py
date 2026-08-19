@@ -58,6 +58,8 @@ def get_global_css():
     return dedent(f"""
     <style>
 
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
     :root {{
         --background: {BACKGROUND};
         --panel: {PANEL};
@@ -91,7 +93,7 @@ def get_global_css():
 
     h1, h2, h3, p, div, span, label {{
         font-family:
-            "Segoe UI", -apple-system, BlinkMacSystemFont,
+            "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont,
             Arial, sans-serif;
     }}
 
@@ -132,7 +134,7 @@ def get_global_css():
         border: 1px solid rgba(45, 212, 191, 0.35);
         background: var(--panel-alt);
         color: var(--brand-accent);
-        font-family: "SFMono-Regular", Consolas, monospace;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
         font-size: 10px;
         letter-spacing: 0.8px;
         text-transform: uppercase;
@@ -179,7 +181,7 @@ def get_global_css():
 
     .stc-row-value {{
         color: var(--text);
-        font-family: "SFMono-Regular", Consolas, monospace;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
         font-weight: 600;
     }}
 
@@ -197,7 +199,7 @@ def get_global_css():
     .stc-heatmap-label {{
         color: var(--text);
         font-size: 12px;
-        font-family: "SFMono-Regular", Consolas, monospace;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
         letter-spacing: 0.4px;
     }}
 
@@ -242,7 +244,7 @@ def get_global_css():
         background: var(--panel);
         border: 1px solid var(--border);
         padding: 7px 8px;
-        font-family: "SFMono-Regular", Consolas, monospace;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
     }}
 
     table.stc-table tr.stc-row-active td {{
@@ -333,6 +335,19 @@ def get_global_css():
         transform: none;
     }}
 
+    /* Frames the intersection SVG in a bordered square, matching
+       every other panel's treatment instead of floating on bare
+       background. */
+    .st-key-intersection_frame {{
+        border: 1px solid var(--border);
+        border-top: 2px solid rgba(45, 212, 191, 0.45);
+        border-radius: 6px;
+        background: var(--panel);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        padding: 4px;
+        overflow: hidden;
+    }}
+
     .stc-time-readout {{
         border: 1px solid var(--border);
         background: var(--panel);
@@ -342,7 +357,7 @@ def get_global_css():
         display: flex;
         flex-direction: column;
         justify-content: center;
-        font-family: "SFMono-Regular", Consolas, monospace;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
     }}
 
     .stc-time-readout span {{

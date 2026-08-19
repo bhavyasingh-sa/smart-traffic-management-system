@@ -21,7 +21,7 @@ from ui.movement_table import render_movement_table
 
 st.set_page_config(
     page_title="NeuroTraffic",
-    page_icon=None,
+    page_icon="🚦",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -117,11 +117,13 @@ _, intersection_column, _ = st.columns([0.5, 3.5, 0.5], gap="medium")
 
 with intersection_column:
 
-    components.html(
-        build_intersection_html(state, previous_state),
-        height=1000,
-        scrolling=False,
-    )
+    with st.container(border=True, key="intersection_frame"):
+
+        components.html(
+            build_intersection_html(state, previous_state),
+            height=1000,
+            scrolling=False,
+        )
 
 # This render's state becomes the next render's "previous" - saved
 # after building the view so the animation always spans exactly one
