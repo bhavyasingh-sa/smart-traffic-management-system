@@ -250,6 +250,9 @@ def get_global_css():
     }}
 
     div.stButton > button {{
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
         border-radius: 8px;
         border: 1px solid #384652;
         background: #171f27;
@@ -261,6 +264,44 @@ def get_global_css():
             box-shadow 0.15s ease,
             transform 0.1s ease,
             background 0.15s ease;
+    }}
+
+    /* Cursor-following spotlight - --mx/--my are set in real time by
+       the mousemove listener injected via render_cursor_glow_script().
+       Sits above the button's own background (z-index via isolation)
+       but below its text (button text/label paints in its own layer
+       on top since it's the button's actual content). */
+    div.stButton > button::before {{
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        background: radial-gradient(
+            circle 90px at var(--mx, 50%) var(--my, 50%),
+            rgba(45, 212, 191, 0.45),
+            transparent 70%
+        );
+    }}
+
+    div.stButton > button[kind="primary"]::before,
+    div.stButton > button[data-testid="stBaseButton-primary"]::before {{
+        background: radial-gradient(
+            circle 90px at var(--mx, 50%) var(--my, 50%),
+            rgba(255, 255, 255, 0.55),
+            transparent 70%
+        );
+    }}
+
+    div.stButton > button:hover::before {{
+        opacity: 1;
+    }}
+
+    div.stButton > button > div {{
+        position: relative;
+        z-index: 1;
     }}
 
     div.stButton > button:hover {{
@@ -289,6 +330,39 @@ def get_global_css():
         border-color: #45e8d2;
         color: #06201c;
         box-shadow: 0 0 20px rgba(45, 212, 191, 0.55);
+    }}
+
+    /* The Play/Pause/Reset button-group container - one rounded
+       rectangular box holding all 3 action buttons, rather than 3
+       separate floating buttons. */
+    .st-key-action_button_group {{
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--panel);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
+        padding: 6px;
+    }}
+
+    .st-key-action_button_group
+    div.stButton > button {{
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }}
+
+    .st-key-action_button_group
+    div.stButton > button:hover {{
+        background: rgba(45, 212, 191, 0.1);
+        border-color: transparent;
+        transform: none;
+    }}
+
+    .st-key-action_button_group
+    div.stButton > button[kind="primary"],
+    .st-key-action_button_group
+    div.stButton > button[data-testid="stBaseButton-primary"] {{
+        background: linear-gradient(180deg, #34e0c9, #17b8a3);
+        border-color: #17b8a3;
     }}
 
     .stc-time-readout {{
@@ -345,3 +419,60 @@ def get_global_css():
 
     </style>
     """)
+
+
+def render_cursor_glow_script():
+    """
+    Makes every button's ::before spotlight (see get_global_css)
+    follow the real cursor position via --mx/--my CSS custom
+    properties, instead of a fixed hover glow.
+
+    Buttons live in the MAIN app document, not inside this
+    component's own iframe, so this reaches out via
+    window.parent.document - the standard, documented way to run
+    custom JS against a Streamlit app's real DOM. A guard flag on
+    window.parent prevents re-attaching a duplicate listener on every
+    rerun (Streamlit re-embeds this component each time app.py runs).
+    """
+
+    import streamlit.components.v1 as components
+
+    components.html(
+        """
+        <script>
+        (function() {
+            var doc = window.parent.document;
+
+            if (doc.__neurotrafficGlowAttached) {
+                return;
+            }
+            doc.__neurotrafficGlowAttached = true;
+
+            doc.addEventListener("mousemove", function(event) {
+
+                var button = event.target.closest(
+                    "div.stButton > button"
+                );
+
+                if (!button) {
+                    return;
+                }
+
+                var rect = button.getBoundingClientRect();
+
+                var x = (
+                    (event.clientX - rect.left) / rect.width
+                ) * 100;
+
+                var y = (
+                    (event.clientY - rect.top) / rect.height
+                ) * 100;
+
+                button.style.setProperty("--mx", x + "%");
+                button.style.setProperty("--my", y + "%");
+            });
+        })();
+        </script>
+        """,
+        height=0,
+    )

@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 
 from simulation.adaptive_simulator import AdaptiveTrafficSimulation
 
-from ui.styles import get_global_css, render_html
+from ui.styles import get_global_css, render_cursor_glow_script, render_html
 from ui.intersection_view import build_intersection_html
 from ui.toolbar import render_simulation_toolbar
 from ui.panels import (
@@ -27,6 +27,7 @@ st.set_page_config(
 )
 
 render_html(get_global_css())
+render_cursor_glow_script()
 
 
 if "simulator" not in st.session_state:

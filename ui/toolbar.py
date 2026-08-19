@@ -32,25 +32,35 @@ def render_simulation_toolbar(state):
     """
 
     (
-        play_column,
-        pause_column,
-        reset_column,
+        button_group_column,
         time_column,
         display_column,
     ) = st.columns(
-        [0.9, 0.9, 0.9, 3.8, 1.3], gap="small"
+        [2.7, 3.8, 1.3], gap="small"
     )
 
-    with play_column:
-        play_clicked = st.button(
-            "Play", use_container_width=True, type="primary"
-        )
+    with button_group_column:
 
-    with pause_column:
-        pause_clicked = st.button("Pause", use_container_width=True)
+        with st.container(border=True, key="action_button_group"):
 
-    with reset_column:
-        reset_clicked = st.button("Reset", use_container_width=True)
+            play_column, pause_column, reset_column = st.columns(
+                3, gap="small"
+            )
+
+            with play_column:
+                play_clicked = st.button(
+                    "Play", use_container_width=True, type="primary"
+                )
+
+            with pause_column:
+                pause_clicked = st.button(
+                    "Pause", use_container_width=True
+                )
+
+            with reset_column:
+                reset_clicked = st.button(
+                    "Reset", use_container_width=True
+                )
 
     with time_column:
         selected_hour = st.slider(
