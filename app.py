@@ -11,6 +11,7 @@ from ui.styles import get_global_css, render_html
 from ui.intersection_view import build_intersection_html
 from ui.toolbar import render_simulation_toolbar
 from ui.panels import (
+    render_congestion_heatmap_panel,
     render_ml_panel,
     render_model_performance_panel,
     render_rag_explanation_panel,
@@ -19,9 +20,7 @@ from ui.movement_table import render_movement_table
 
 
 st.set_page_config(
-    page_title=(
-        "Smart Traffic Management and Decision Support System"
-    ),
+    page_title="NeuroTraffic",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -61,7 +60,10 @@ if "simulation_time_of_day" not in st.session_state:
 render_html(f"""
 <div class="stc-header">
     <div class="stc-title">
-        SMART TRAFFIC MANAGEMENT AND DECISION SUPPORT SYSTEM
+        NEUROTRAFFIC
+    </div>
+    <div class="stc-tagline">
+        Adaptive Traffic Intelligence
     </div>
     <div class="stc-badge-row">
         <div class="stc-badge">
@@ -124,6 +126,13 @@ with intersection_column:
 # after building the view so the animation always spans exactly one
 # visible update.
 st.session_state.previous_render_state = state
+
+
+_, heatmap_column, _ = st.columns([0.8, 2.6, 0.8], gap="medium")
+
+with heatmap_column:
+
+    render_congestion_heatmap_panel(state)
 
 
 # AI explanation gets its own full-width, centered section rather than

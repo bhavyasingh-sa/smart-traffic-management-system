@@ -1,6 +1,7 @@
 """adaptive_simulator.py - the tick-by-tick, stateful simulation engine; owns all mutable state, calls into stateless controller_core.py for decisions."""
 
 from collections import Counter, deque
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
@@ -906,32 +907,42 @@ class AdaptiveTrafficSimulation:
                 for direction in TRAVEL_DIRECTIONS
             }
 
-        explanations = {}
-
-        for direction in TRAVEL_DIRECTIONS:
+        def generate_one(direction):
 
             try:
 
-                explanations[direction] = (
-                    generate_approach_analysis(
-                        approach=direction,
-                        ml_prediction=ml_predictions[
-                            direction
-                        ],
-                        ir_prediction=(
-                            self._approach_ir_prediction_for_rag(
-                                direction, ir_predictions
-                            )
-                        ),
-                    )
+                return generate_approach_analysis(
+                    approach=direction,
+                    ml_prediction=ml_predictions[direction],
+                    ir_prediction=(
+                        self._approach_ir_prediction_for_rag(
+                            direction, ir_predictions
+                        )
+                    ),
                 )
 
             except Exception as error:
 
-                explanations[direction] = (
+                return (
                     "Gemini explanation generation "
                     f"failed: {error}"
                 )
+
+        # The 4 calls are independent network requests, so running
+        # them concurrently instead of one-after-another cuts wall
+        # time roughly 4x - each direction still gets its own
+        # try/except above, so one failing doesn't affect the others.
+        with ThreadPoolExecutor(
+            max_workers=len(TRAVEL_DIRECTIONS)
+        ) as executor:
+
+            results = executor.map(
+                generate_one, TRAVEL_DIRECTIONS
+            )
+
+            explanations = dict(
+                zip(TRAVEL_DIRECTIONS, results)
+            )
 
         return explanations
 

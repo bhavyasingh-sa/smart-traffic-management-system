@@ -37,6 +37,41 @@ def render_ml_panel(state):
     """)
 
 
+def render_congestion_heatmap_panel(state):
+    """
+    One horizontal bar per travel direction (NB/SB/EB/WB - not
+    physical side, same convention as everywhere else in this
+    project), reusing state['approach_live_congestion'] rather than
+    computing anything new.
+    """
+
+    rows = "".join(
+        f"""
+        <div class="stc-heatmap-row">
+            <div class="stc-heatmap-label-row">
+                <span class="stc-heatmap-label">{direction}</span>
+                <span class="stc-heatmap-level" style="color: {state['approach_live_congestion'][direction]['colour']};">
+                    {state['approach_live_congestion'][direction]['level'].title()}
+                </span>
+            </div>
+            <div class="stc-heatmap-track">
+                <div class="stc-heatmap-fill" style="width: {state['approach_live_congestion'][direction]['score'] * 100:.1f}%; background: {state['approach_live_congestion'][direction]['colour']};"></div>
+            </div>
+        </div>
+        """
+        for direction in TRAVEL_DIRECTIONS
+    )
+
+    render_html(f"""
+    <div class="stc-panel">
+        <div class="stc-panel-title">
+            Congestion Heatmap — By Approach
+        </div>
+        {rows}
+    </div>
+    """)
+
+
 def render_model_performance_panel(model_bundle):
 
     selected_scope = model_bundle["model_scope"]

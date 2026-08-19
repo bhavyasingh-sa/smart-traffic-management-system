@@ -14,6 +14,8 @@ MUTED = "#7c8894"
 ASPHALT = "#22282e"
 LANE_MARKING = "#c9d1d8"
 
+BRAND_ACCENT = "#2dd4bf"
+
 SIGNAL_RED = "#c0392b"
 SIGNAL_YELLOW = "#c9a227"
 SIGNAL_GREEN = "#2f9e5c"
@@ -63,6 +65,7 @@ def get_global_css():
         --border: {BORDER};
         --text: {TEXT};
         --muted: {MUTED};
+        --brand-accent: {BRAND_ACCENT};
     }}
 
     html, body, [data-testid="stAppViewContainer"] {{
@@ -99,6 +102,15 @@ def get_global_css():
         font-weight: 700;
         letter-spacing: 0.6px;
         margin: 0;
+    }}
+
+    .stc-tagline {{
+        color: var(--brand-accent);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.3px;
+        text-transform: uppercase;
+        margin-top: 4px;
     }}
 
     .stc-badge-row {{
@@ -158,6 +170,43 @@ def get_global_css():
         color: var(--text);
         font-family: "SFMono-Regular", Consolas, monospace;
         font-weight: 600;
+    }}
+
+    .stc-heatmap-row {{
+        padding: 8px 0;
+    }}
+
+    .stc-heatmap-label-row {{
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 6px;
+    }}
+
+    .stc-heatmap-label {{
+        color: var(--text);
+        font-size: 12px;
+        font-family: "SFMono-Regular", Consolas, monospace;
+        letter-spacing: 0.4px;
+    }}
+
+    .stc-heatmap-level {{
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+    }}
+
+    .stc-heatmap-track {{
+        height: 6px;
+        background: var(--panel-alt);
+        border: 1px solid var(--border);
+        overflow: hidden;
+    }}
+
+    .stc-heatmap-fill {{
+        height: 100%;
+        transition: width 0.6s ease;
     }}
 
     .stc-value-lg {{

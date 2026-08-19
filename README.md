@@ -1,4 +1,4 @@
-# Smart Traffic Management and Decision Support System
+# NeuroTraffic
 
 A live traffic signal controller for a real intersection that decides,
 tick by tick, whether to hold or switch each light — combining a trained
