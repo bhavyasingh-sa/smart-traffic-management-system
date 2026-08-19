@@ -286,15 +286,6 @@ def get_global_css():
         );
     }}
 
-    div.stButton > button[kind="primary"]::before,
-    div.stButton > button[data-testid="stBaseButton-primary"]::before {{
-        background: radial-gradient(
-            circle 90px at var(--mx, 50%) var(--my, 50%),
-            rgba(255, 255, 255, 0.55),
-            transparent 70%
-        );
-    }}
-
     div.stButton > button:hover::before {{
         opacity: 1;
     }}
@@ -315,21 +306,6 @@ def get_global_css():
     div.stButton > button:active {{
         transform: translateY(0);
         box-shadow: 0 0 8px rgba(45, 212, 191, 0.3);
-    }}
-
-    div.stButton > button[kind="primary"],
-    div.stButton > button[data-testid="stBaseButton-primary"] {{
-        background: linear-gradient(180deg, #34e0c9, #17b8a3);
-        border: 1px solid #17b8a3;
-        color: #06201c;
-    }}
-
-    div.stButton > button[kind="primary"]:hover,
-    div.stButton > button[data-testid="stBaseButton-primary"]:hover {{
-        background: linear-gradient(180deg, #45e8d2, #1fcab3);
-        border-color: #45e8d2;
-        color: #06201c;
-        box-shadow: 0 0 20px rgba(45, 212, 191, 0.55);
     }}
 
     /* The Play/Pause/Reset button-group container - one rounded
@@ -355,14 +331,6 @@ def get_global_css():
         background: rgba(45, 212, 191, 0.1);
         border-color: transparent;
         transform: none;
-    }}
-
-    .st-key-action_button_group
-    div.stButton > button[kind="primary"],
-    .st-key-action_button_group
-    div.stButton > button[data-testid="stBaseButton-primary"] {{
-        background: linear-gradient(180deg, #34e0c9, #17b8a3);
-        border-color: #17b8a3;
     }}
 
     .stc-time-readout {{
