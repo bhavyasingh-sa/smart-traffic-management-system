@@ -69,7 +69,13 @@ def get_global_css():
     }}
 
     html, body, [data-testid="stAppViewContainer"] {{
-        background: var(--background);
+        background:
+            radial-gradient(
+                ellipse 1200px 600px at 15% -10%,
+                rgba(45, 212, 191, 0.05),
+                transparent 60%
+            ),
+            var(--background);
         color: var(--text);
     }}
 
@@ -91,9 +97,11 @@ def get_global_css():
 
     .stc-header {{
         border: 1px solid var(--border);
+        border-top: 2px solid var(--brand-accent);
         background: var(--panel);
         padding: 16px 20px;
         margin-bottom: 12px;
+        box-shadow: 0 0 24px rgba(45, 212, 191, 0.08);
     }}
 
     .stc-title {{
@@ -121,9 +129,10 @@ def get_global_css():
     }}
 
     .stc-badge {{
-        border: 1px solid var(--border);
+        border: 1px solid rgba(45, 212, 191, 0.35);
         background: var(--panel-alt);
-        color: var(--muted);
+        color: var(--brand-accent);
+        font-family: "SFMono-Regular", Consolas, monospace;
         font-size: 10px;
         letter-spacing: 0.8px;
         text-transform: uppercase;
@@ -132,9 +141,11 @@ def get_global_css():
 
     .stc-panel {{
         border: 1px solid var(--border);
+        border-top: 2px solid rgba(45, 212, 191, 0.45);
         background: var(--panel);
         padding: 14px 16px;
         margin-bottom: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
     }}
 
     .stc-panel-title {{
@@ -143,7 +154,7 @@ def get_global_css():
         font-weight: 700;
         letter-spacing: 1.1px;
         text-transform: uppercase;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid rgba(45, 212, 191, 0.18);
         padding-bottom: 8px;
         margin-bottom: 10px;
     }}
@@ -209,34 +220,6 @@ def get_global_css():
         transition: width 0.6s ease;
     }}
 
-    .stc-value-lg {{
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text);
-        font-family: "SFMono-Regular", Consolas, monospace;
-    }}
-
-    .stc-value-label {{
-        color: var(--muted);
-        font-size: 10px;
-        letter-spacing: 0.8px;
-        text-transform: uppercase;
-        margin-top: 2px;
-    }}
-
-    .stc-grid-2 {{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1px;
-        background: var(--border);
-        border: 1px solid var(--border);
-    }}
-
-    .stc-grid-cell {{
-        background: var(--panel);
-        padding: 10px 12px;
-    }}
-
     table.stc-table {{
         width: 100%;
         border-collapse: collapse;
@@ -273,12 +256,14 @@ def get_global_css():
         color: #e7eef4;
         font-weight: 600;
         min-height: 38px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }}
 
     div.stButton > button:hover {{
-        border-color: #5c7285;
+        border-color: var(--brand-accent);
         background: #1c2830;
         color: white;
+        box-shadow: 0 0 12px rgba(45, 212, 191, 0.25);
     }}
 
     .stc-time-readout {{
@@ -300,19 +285,23 @@ def get_global_css():
     }}
 
     .stc-time-readout strong {{
-        color: var(--text);
+        color: var(--brand-accent);
         font-size: 13px;
         letter-spacing: 0.3px;
     }}
 
-    [data-testid="stTabs"] button {{
-        border-radius: 0;
-        color: var(--muted);
+    [data-testid="stExpander"] {{
+        border: 1px solid var(--border);
+        background: var(--panel);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24);
     }}
 
-    [data-testid="stTabs"] button[aria-selected="true"] {{
+    [data-testid="stExpander"] summary {{
         color: var(--text);
-        border-bottom-color: #5c8ca8;
+    }}
+
+    [data-testid="stExpander"] summary:hover {{
+        color: var(--brand-accent);
     }}
 
     </style>
