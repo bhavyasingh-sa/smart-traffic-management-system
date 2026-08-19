@@ -42,7 +42,9 @@ def render_simulation_toolbar(state):
     )
 
     with play_column:
-        play_clicked = st.button("Play", use_container_width=True)
+        play_clicked = st.button(
+            "Play", use_container_width=True, type="primary"
+        )
 
     with pause_column:
         pause_clicked = st.button("Pause", use_container_width=True)

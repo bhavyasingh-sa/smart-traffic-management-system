@@ -250,20 +250,45 @@ def get_global_css():
     }}
 
     div.stButton > button {{
-        border-radius: 2px;
+        border-radius: 8px;
         border: 1px solid #384652;
         background: #171f27;
         color: #e7eef4;
         font-weight: 600;
-        min-height: 38px;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        min-height: 42px;
+        transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease,
+            transform 0.1s ease,
+            background 0.15s ease;
     }}
 
     div.stButton > button:hover {{
         border-color: var(--brand-accent);
         background: #1c2830;
         color: white;
-        box-shadow: 0 0 12px rgba(45, 212, 191, 0.25);
+        box-shadow: 0 0 16px rgba(45, 212, 191, 0.35);
+        transform: translateY(-1px);
+    }}
+
+    div.stButton > button:active {{
+        transform: translateY(0);
+        box-shadow: 0 0 8px rgba(45, 212, 191, 0.3);
+    }}
+
+    div.stButton > button[kind="primary"],
+    div.stButton > button[data-testid="stBaseButton-primary"] {{
+        background: linear-gradient(180deg, #34e0c9, #17b8a3);
+        border: 1px solid #17b8a3;
+        color: #06201c;
+    }}
+
+    div.stButton > button[kind="primary"]:hover,
+    div.stButton > button[data-testid="stBaseButton-primary"]:hover {{
+        background: linear-gradient(180deg, #45e8d2, #1fcab3);
+        border-color: #45e8d2;
+        color: #06201c;
+        box-shadow: 0 0 20px rgba(45, 212, 191, 0.55);
     }}
 
     .stc-time-readout {{
@@ -302,6 +327,20 @@ def get_global_css():
 
     [data-testid="stExpander"] summary:hover {{
         color: var(--brand-accent);
+    }}
+
+    [data-testid="stSlider"] [role="slider"] {{
+        box-shadow:
+            0 0 0 4px rgba(45, 212, 191, 0.22),
+            0 0 12px rgba(45, 212, 191, 0.45);
+        transition: box-shadow 0.15s ease;
+    }}
+
+    [data-testid="stSlider"] [role="slider"]:hover,
+    [data-testid="stSlider"] [role="slider"]:focus {{
+        box-shadow:
+            0 0 0 6px rgba(45, 212, 191, 0.28),
+            0 0 18px rgba(45, 212, 191, 0.6);
     }}
 
     </style>
